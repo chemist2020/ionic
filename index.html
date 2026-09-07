@@ -1,11 +1,9 @@
-جدید
-
 <!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>بازی یونی‌یار · شیمی دهم</title>
+    <title>یونی‌یار · آیوپاک</title>
     <style>
         * {
             box-sizing: border-box;
@@ -102,7 +100,7 @@
         }
         .question-box .hint {
             font-size: 1rem;
-            opacity: 0.8;
+            opacity: 0.9;
             margin-top: 12px;
             background: #123a4e;
             padding: 8px 16px;
@@ -227,7 +225,7 @@
     <div class="game-card">
         <h1>
             🧪 یونی‌یار
-            <small>دهم تجربی</small>
+            <small>آیوپاک</small>
         </h1>
 
         <div class="score-board">
@@ -237,7 +235,7 @@
 
         <div class="question-box">
             <div class="formula" id="formulaDisplay">NaCl</div>
-            <div class="hint" id="hintDisplay">🔍 نام ترکیب را انتخاب کن</div>
+            <div class="hint" id="hintDisplay">🔍 نام آیوپاک را انتخاب کن</div>
         </div>
 
         <div class="options-grid" id="optionsContainer">
@@ -258,30 +256,121 @@
     </div>
     <script>
         (function(){
-            // ----- داده‌های بازی (ترکیبات یونی دوتایی و چندتایی) -----
-            const questions = [
-                { formula: "NaCl",  correct: "سدیم کلرید", options: ["کلرید سدیم", "سدیم کلرید", "کلرید سدیم (II)", "سدیم کلریت"] },
-                { formula: "MgO",   correct: "منیزیم اکسید", options: ["اکسید منیزیم", "منیزیم اکسید", "منیزیم (II) اکسید", "اکسید منیزیم (II)"] },
-                { formula: "CaF₂",  correct: "کلسیم فلورید", options: ["فلورید کلسیم", "کلسیم فلورید", "کلسیم (II) فلورید", "فلورید کلسیم (II)"] },
-                { formula: "Al₂O₃", correct: "آلومینیوم اکسید", options: ["اکسید آلومینیوم", "آلومینیوم اکسید", "آلومینیوم (III) اکسید", "اکسید آلومینیوم (III)"] },
-                { formula: "Na₂O",  correct: "سدیم اکسید", options: ["اکسید سدیم", "سدیم اکسید", "سدیم (I) اکسید", "اکسید سدیم (I)"] },
-                { formula: "KCl",   correct: "پتاسیم کلرید", options: ["کلرید پتاسیم", "پتاسیم کلرید", "پتاسیم (I) کلرید", "کلرید پتاسیم (I)"] },
-                { formula: "LiBr",  correct: "لیتیم برمید", options: ["برمید لیتیم", "لیتیم برمید", "لیتیم (I) برمید", "برمید لیتیم (I)"] },
-                { formula: "BeO",   correct: "بریلیوم اکسید", options: ["اکسید بریلیوم", "بریلیوم اکسید", "بریلیوم (II) اکسید", "اکسید بریلیوم (II)"] },
-                { formula: "NH₄Cl", correct: "کلرید آمونیوم", options: ["کلرید آمونیوم", "آمونیوم کلرید", "کلرید آمونیوم (I)", "آمونیوم کلرید (I)"] },
-                { formula: "NaOH",  correct: "سدیم هیدروکسید", options: ["هیدروکسید سدیم", "سدیم هیدروکسید", "سدیم (I) هیدروکسید", "هیدروکسید سدیم (I)"] },
-                { formula: "KNO₃",  correct: "پتاسیم نیترات", options: ["نیترات پتاسیم", "پتاسیم نیترات", "پتاسیم (I) نیترات", "نیترات پتاسیم (I)"] },
-                { formula: "CaCO₃", correct: "کلسیم کربنات", options: ["کربنات کلسیم", "کلسیم کربنات", "کلسیم (II) کربنات", "کربنات کلسیم (II)"] },
-                { formula: "MgSO₄", correct: "منیزیم سولفات", options: ["سولفات منیزیم", "منیزیم سولفات", "منیزیم (II) سولفات", "سولفات منیزیم (II)"] },
-                { formula: "CuCl₂", correct: "مس (II) کلرید", options: ["کلرید مس (II)", "مس (II) کلرید", "کلرید مس", "مس کلرید (II)"] },
-                { formula: "Fe₂O₃", correct: "آهن (III) اکسید", options: ["اکسید آهن (III)", "آهن (III) اکسید", "اکسید آهن", "آهن اکسید (III)"] }
+            // ----- ترکیبات با نام آیوپاک (طبق قواعد: نام فلز + (عدد رومی در صورت نیاز) + نام آنیون) -----
+            const baseCompounds = [
+                // فلزات با یک ظرفیت ثابت (عدد رومی نمی‌آید)
+                { formula: "NaCl",  name: "سدیم کلرید" },
+                { formula: "MgO",   name: "منیزیم اکسید" },
+                { formula: "CaF₂",  name: "کلسیم فلورید" },
+                { formula: "Al₂O₃", name: "آلومینیوم اکسید" },
+                { formula: "Na₂O",  name: "سدیم اکسید" },
+                { formula: "KCl",   name: "پتاسیم کلرید" },
+                { formula: "LiBr",  name: "لیتیم برمید" },
+                { formula: "BeO",   name: "بریلیوم اکسید" },
+                { formula: "NH₄Cl", name: "آمونیوم کلرید" },  // آمونیوم به عنوان کاتیون
+                { formula: "NaOH",  name: "سدیم هیدروکسید" },
+                { formula: "KNO₃",  name: "پتاسیم نیترات" },
+                { formula: "CaCO₃", name: "کلسیم کربنات" },
+                { formula: "MgSO₄", name: "منیزیم سولفات" },
+                { formula: "Na₃N",  name: "سدیم نیترید" },
+                { formula: "K₂S",   name: "پتاسیم سولفید" },
+                { formula: "Mg₃P₂", name: "منیزیم فسفید" },
+                // فلزات با چند ظرفیتی (عدد رومی داخل پرانتز)
+                { formula: "CuCl₂", name: "مس (II) کلرید" },
+                { formula: "Cu₂O",  name: "مس (I) اکسید" },
+                { formula: "Fe₂O₃", name: "آهن (III) اکسید" },
+                { formula: "FeO",   name: "آهن (II) اکسید" },
+                { formula: "FeCl₃", name: "آهن (III) کلرید" },
+                { formula: "FeCl₂", name: "آهن (II) کلرید" },
+                { formula: "CuBr",  name: "مس (I) برمید" },
+                { formula: "CuBr₂", name: "مس (II) برمید" },
+                { formula: "PbO₂",  name: "سرب (IV) اکسید" },
+                { formula: "PbO",   name: "سرب (II) اکسید" },
+                { formula: "SnCl₄", name: "قلع (IV) کلرید" },
+                { formula: "SnCl₂", name: "قلع (II) کلرید" }
             ];
 
+            // ----- ساخت سوالات (برخی نام بپرس، برخی فرمول) -----
+            function buildQuestionPool() {
+                const pool = [];
+                baseCompounds.forEach(c => {
+                    // سوال نام از روی فرمول (حدود ۶۰٪)
+                    if (Math.random() < 0.6) {
+                        pool.push({
+                            type: 'name',
+                            display: c.formula,
+                            correct: c.name,
+                            options: generateDistractors(c.name, 'name')
+                        });
+                    } else {
+                        // سوال فرمول از روی نام
+                        pool.push({
+                            type: 'formula',
+                            display: c.name,
+                            correct: c.formula,
+                            options: generateDistractors(c.formula, 'formula')
+                        });
+                    }
+                });
+                // حداقل ۱۲ سوال داشته باشیم
+                while (pool.length < 12) {
+                    const c = baseCompounds[Math.floor(Math.random() * baseCompounds.length)];
+                    pool.push({
+                        type: 'name',
+                        display: c.formula,
+                        correct: c.name,
+                        options: generateDistractors(c.name, 'name')
+                    });
+                }
+                return shuffleArray(pool);
+            }
+
+            // تولید گزینه‌های انحرافی (۳ عدد) با تنوع
+            function generateDistractors(correctValue, mode) {
+                let candidates = [];
+                if (mode === 'name') {
+                    const allNames = baseCompounds.map(c => c.name);
+                    const filtered = allNames.filter(n => n !== correctValue);
+                    candidates = shuffleArray(filtered).slice(0, 3);
+                    while (candidates.length < 3) {
+                        const randomName = allNames[Math.floor(Math.random() * allNames.length)];
+                        if (!candidates.includes(randomName) && randomName !== correctValue) {
+                            candidates.push(randomName);
+                        } else if (allNames.length > 1) {
+                            candidates.push(allNames[0] === correctValue ? allNames[1] : allNames[0]);
+                        }
+                    }
+                } else { // formula
+                    const allFormulas = baseCompounds.map(c => c.formula);
+                    const filtered = allFormulas.filter(f => f !== correctValue);
+                    candidates = shuffleArray(filtered).slice(0, 3);
+                    while (candidates.length < 3) {
+                        const randomF = allFormulas[Math.floor(Math.random() * allFormulas.length)];
+                        if (!candidates.includes(randomF) && randomF !== correctValue) {
+                            candidates.push(randomF);
+                        } else if (allFormulas.length > 1) {
+                            candidates.push(allFormulas[0] === correctValue ? allFormulas[1] : allFormulas[0]);
+                        }
+                    }
+                }
+                const result = [correctValue, ...candidates];
+                return shuffleArray(result);
+            }
+
+            // شافل آرایه
+            function shuffleArray(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
+
             // ----- متغیرهای وضعیت -----
+            let questions = [];
             let currentIndex = 0;
             let score = 0;
             let isAnswered = false;
-            let selectedOption = null;      // index دکمه انتخاب‌شده
             let correctAnswerIndex = -1;
 
             // المنت‌ها
@@ -292,83 +381,68 @@
             const scoreDisplay = document.getElementById('scoreDisplay');
             const nextBtn = document.getElementById('nextBtn');
 
-            // ----- توابع کمکی -----
-            function shuffleArray(arr) {
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
-            }
-
-            // بارگذاری سوال با ایندکس داده شده
+            // بارگذاری سوال با ایندکس
             function loadQuestion(index) {
                 const q = questions[index];
-                if (!q) {
-                    // اگر سوالی نبود (اتفاق نمی‌افتد)
-                    return;
+                if (!q) return;
+
+                formulaDisplay.textContent = q.display;
+                if (q.type === 'name') {
+                    hintDisplay.textContent = '🧪 فرمول داده شده، نام آیوپاک را انتخاب کن';
+                } else {
+                    hintDisplay.textContent = '📛 نام داده شده، فرمول شیمیایی را انتخاب کن';
                 }
 
-                // تنظیم فرمول و hint
-                formulaDisplay.textContent = q.formula;
-                hintDisplay.textContent = `🔍 نام ترکیب را انتخاب کن`;
+                const opts = q.options;
+                correctAnswerIndex = opts.indexOf(q.correct);
+                if (correctAnswerIndex === -1) {
+                    opts[0] = q.correct;
+                    correctAnswerIndex = 0;
+                    shuffleArray(opts);
+                    correctAnswerIndex = opts.indexOf(q.correct);
+                }
 
-                // shuffle گزینه‌ها (برای تنوع) ولی جای درست را ذخیره کن
-                const shuffled = shuffleArray([...q.options]);
-                // پیدا کردن ایندکس گزینه صحیح در shuffled
-                const correctText = q.correct;
-                correctAnswerIndex = shuffled.indexOf(correctText);
-
-                // به‌روزرسانی دکمه‌ها
                 optionsBtns.forEach((btn, i) => {
-                    btn.textContent = shuffled[i];
-                    btn.className = 'option-btn';        // ریست کلاس‌ها
+                    btn.textContent = opts[i] || '---';
+                    btn.className = 'option-btn';
                     btn.dataset.correct = (i === correctAnswerIndex) ? 'true' : 'false';
                     btn.disabled = false;
                 });
 
-                // ریست وضعیت
                 isAnswered = false;
-                selectedOption = null;
                 feedbackEl.textContent = '🤔 کدام گزینه درست است؟';
                 feedbackEl.style.background = '#0d2f41';
-                nextBtn.disabled = true;   // تا وقتی جواب نده نوبت بعد فعال نشه
+                nextBtn.disabled = true;
 
-                // حذف disabled از همه و reset
                 optionsBtns.forEach(btn => {
                     btn.classList.remove('correct', 'wrong', 'disabled');
                     btn.disabled = false;
                 });
             }
 
-            // بررسی پاسخ کاربر
+            // مدیریت کلیک روی گزینه
             function handleOptionClick(e) {
                 const btn = e.currentTarget;
-                // اگر قبلاً پاسخ داده شده یا دکمه غیرفعال است، کاری نکن
                 if (isAnswered || btn.disabled) return;
 
-                // مشخص کردن گزینه صحیح و انتخاب کاربر
                 const isCorrect = btn.dataset.correct === 'true';
-                const btnIndex = Array.from(optionsBtns).indexOf(btn);
+                const q = questions[currentIndex];
 
-                // غیرفعال کردن همه دکمه‌ها
                 optionsBtns.forEach(b => {
                     b.disabled = true;
                     b.classList.add('disabled');
                 });
 
-                // نمایش بازخورد
                 if (isCorrect) {
                     score += 1;
                     scoreDisplay.textContent = score;
-                    feedbackEl.textContent = '✅ درست! عالی!';
+                    feedbackEl.textContent = '✅ عالی! درست است.';
                     feedbackEl.style.background = '#1b6b42';
                     btn.classList.add('correct');
                 } else {
-                    feedbackEl.textContent = `❌ نادرست! گزینه صحیح: ${questions[currentIndex].correct}`;
+                    feedbackEl.textContent = `❌ نادرست. پاسخ صحیح: ${q.correct}`;
                     feedbackEl.style.background = '#8f2f3a';
                     btn.classList.add('wrong');
-                    // نمایش گزینه درست
                     optionsBtns.forEach(b => {
                         if (b.dataset.correct === 'true') {
                             b.classList.add('correct');
@@ -377,39 +451,34 @@
                 }
 
                 isAnswered = true;
-                selectedOption = btnIndex;
-                nextBtn.disabled = false;   // فعال شدن دکمه بعدی
+                nextBtn.disabled = false;
             }
 
             // رفتن به سوال بعدی
             function goToNext() {
-                if (!isAnswered) return;   // امنیت
-
-                // افزایش ایندکس (چرخشی)
+                if (!isAnswered) return;
                 currentIndex = (currentIndex + 1) % questions.length;
                 loadQuestion(currentIndex);
-                // اسکرول به بالا (در موبایل مفید)
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            // ---- راه‌اندازی اولیه ----
+            // ----- مقداردهی اولیه -----
             function initGame() {
-                // shuffle کردن سوالات برای تنوع
+                questions = buildQuestionPool();
                 shuffleArray(questions);
-                // ریست امتیاز
+                while (questions.length < 10) {
+                    const extra = buildQuestionPool();
+                    questions = questions.concat(extra);
+                }
                 score = 0;
                 scoreDisplay.textContent = '0';
                 currentIndex = 0;
                 loadQuestion(0);
 
-                // اتصال رویدادها به دکمه‌ها
                 optionsBtns.forEach(btn => {
                     btn.addEventListener('click', handleOptionClick);
                 });
-
                 nextBtn.addEventListener('click', goToNext);
-
-                // دکمه بعدی در ابتدا غیرفعال
                 nextBtn.disabled = true;
             }
 
@@ -417,4 +486,4 @@
         })();
     </script>
 </body>
-</html>
+    </html>
