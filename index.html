@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>یونی‌یار · آیوپاک</title>
+    <title>یونی‌یار · آیوپاک (بدون مس، آهن، آمونیوم)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -257,6 +257,7 @@
     <script>
         (function(){
             // ----- ترکیبات با نام آیوپاک (طبق قواعد: نام فلز + (عدد رومی در صورت نیاز) + نام آنیون) -----
+            // حذف مس، آهن و آمونیوم (و هر ترکیب حاوی آنها)
             const baseCompounds = [
                 // فلزات با یک ظرفیت ثابت (عدد رومی نمی‌آید)
                 { formula: "NaCl",  name: "سدیم کلرید" },
@@ -267,7 +268,6 @@
                 { formula: "KCl",   name: "پتاسیم کلرید" },
                 { formula: "LiBr",  name: "لیتیم برمید" },
                 { formula: "BeO",   name: "بریلیوم اکسید" },
-                { formula: "NH₄Cl", name: "آمونیوم کلرید" },  // آمونیوم به عنوان کاتیون
                 { formula: "NaOH",  name: "سدیم هیدروکسید" },
                 { formula: "KNO₃",  name: "پتاسیم نیترات" },
                 { formula: "CaCO₃", name: "کلسیم کربنات" },
@@ -275,19 +275,17 @@
                 { formula: "Na₃N",  name: "سدیم نیترید" },
                 { formula: "K₂S",   name: "پتاسیم سولفید" },
                 { formula: "Mg₃P₂", name: "منیزیم فسفید" },
-                // فلزات با چند ظرفیتی (عدد رومی داخل پرانتز)
-                { formula: "CuCl₂", name: "مس (II) کلرید" },
-                { formula: "Cu₂O",  name: "مس (I) اکسید" },
-                { formula: "Fe₂O₃", name: "آهن (III) اکسید" },
-                { formula: "FeO",   name: "آهن (II) اکسید" },
-                { formula: "FeCl₃", name: "آهن (III) کلرید" },
-                { formula: "FeCl₂", name: "آهن (II) کلرید" },
-                { formula: "CuBr",  name: "مس (I) برمید" },
-                { formula: "CuBr₂", name: "مس (II) برمید" },
-                { formula: "PbO₂",  name: "سرب (IV) اکسید" },
-                { formula: "PbO",   name: "سرب (II) اکسید" },
-                { formula: "SnCl₄", name: "قلع (IV) کلرید" },
-                { formula: "SnCl₂", name: "قلع (II) کلرید" }
+                { formula: "Ca₃N₂", name: "کلسیم نیترید" },
+                { formula: "BaO",   name: "باریم اکسید" },
+                { formula: "BaCl₂", name: "باریم کلرید" },
+                { formula: "SrO",   name: "استرانسیم اکسید" },
+                { formula: "RbCl",  name: "روبیدیم کلرید" },
+                { formula: "CsBr",  name: "سزیم برمید" },
+                { formula: "Li₂O",  name: "لیتیم اکسید" },
+                { formula: "Na₂S",  name: "سدیم سولفید" },
+                { formula: "K₂O",   name: "پتاسیم اکسید" },
+                { formula: "CaBr₂", name: "کلسیم برمید" },
+                { formula: "MgCl₂", name: "منیزیم کلرید" }
             ];
 
             // ----- ساخت سوالات (برخی نام بپرس، برخی فرمول) -----
@@ -486,4 +484,4 @@
         })();
     </script>
 </body>
-    </html>
+</html>
