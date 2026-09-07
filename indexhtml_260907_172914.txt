@@ -1,0 +1,420 @@
+جدید
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>بازی یونی‌یار · شیمی دهم</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', 'IRANSans', 'Tahoma', sans-serif;
+            background: linear-gradient(145deg, #0b2a3e 0%, #1b4a6b 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            color: #f0f7fc;
+        }
+        .game-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            padding: 24px 20px 30px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        h1 small {
+            font-size: 1rem;
+            font-weight: 300;
+            background: #ffd966;
+            color: #1a3a4e;
+            padding: 2px 16px;
+            border-radius: 40px;
+            letter-spacing: 0;
+        }
+        .score-board {
+            background: #0e2a3b;
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0 20px;
+            border: 1px solid #3e7b9b;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.4);
+            font-weight: 500;
+        }
+        .score-board span {
+            background: #f5c542;
+            color: #0a1e2b;
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.6rem;
+            line-height: 1.4;
+            min-width: 70px;
+            text-align: center;
+        }
+        .question-box {
+            background: #1c4058;
+            padding: 24px 12px;
+            border-radius: 36px;
+            margin: 12px 0 24px;
+            text-align: center;
+            border: 2px dashed #7bb3d1;
+            box-shadow: inset 0 0 12px #0f2c3d;
+        }
+        .question-box .formula {
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: #0b212f;
+            padding: 12px 8px;
+            border-radius: 28px;
+            display: inline-block;
+            min-width: 180px;
+            color: #ffeaaf;
+            box-shadow: 0 4px 0 #041016;
+        }
+        .question-box .hint {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 12px;
+            background: #123a4e;
+            padding: 8px 16px;
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid #3d7f9e;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0 18px;
+        }
+        .option-btn {
+            background: #1e4a62;
+            border: none;
+            border-radius: 40px;
+            padding: 16px 6px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #f0f9ff;
+            box-shadow: 0 8px 0 #0b2635, 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: 0.08s linear;
+            text-align: center;
+            word-break: break-word;
+            border: 1px solid #4791b0;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .option-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0b2635;
+        }
+        .option-btn.correct {
+            background: #2e9b5e;
+            border-color: #7bdfa0;
+            box-shadow: 0 4px 0 #1b5a37;
+        }
+        .option-btn.wrong {
+            background: #b13e4b;
+            border-color: #f58b8b;
+            box-shadow: 0 4px 0 #712a33;
+        }
+        .option-btn.disabled {
+            opacity: 0.6;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #0b2635;
+            pointer-events: none;
+        }
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .next-btn {
+            background: #f5b042;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #0d293b;
+            box-shadow: 0 8px 0 #9e6f2b;
+            transition: 0.08s linear;
+            flex: 2;
+            min-width: 130px;
+            border: 1px solid #fad48a;
+            cursor: pointer;
+            touch-action: manipulation;
+            text-align: center;
+        }
+        .next-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #9e6f2b;
+        }
+        .next-btn:disabled {
+            opacity: 0.4;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #9e6f2b;
+            pointer-events: none;
+        }
+        .feedback {
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 40px;
+            background: #0d2f41;
+            min-height: 3.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            border: 1px solid #3d7999;
+        }
+        .footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            width: 100%;
+            color: #c7e2f0;
+            font-weight: 300;
+        }
+        .footer strong {
+            font-weight: 500;
+            color: #fadf9e;
+        }
+        @media (max-width: 480px) {
+            .game-card { padding: 16px; }
+            .question-box .formula { font-size: 2.2rem; min-width: 140px; }
+            .option-btn { font-size: 1rem; padding: 14px 4px; }
+            .next-btn { font-size: 1.1rem; padding: 12px 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-card">
+        <h1>
+            🧪 یونی‌یار
+            <small>دهم تجربی</small>
+        </h1>
+
+        <div class="score-board">
+            <span style="font-size:1.1rem;">🏆 امتیاز</span>
+            <span id="scoreDisplay">0</span>
+        </div>
+
+        <div class="question-box">
+            <div class="formula" id="formulaDisplay">NaCl</div>
+            <div class="hint" id="hintDisplay">🔍 نام ترکیب را انتخاب کن</div>
+        </div>
+
+        <div class="options-grid" id="optionsContainer">
+            <button class="option-btn" data-index="0">کلرید سدیم</button>
+            <button class="option-btn" data-index="1">سدیم کلرید</button>
+            <button class="option-btn" data-index="2">کلرید سدیم (II)</button>
+            <button class="option-btn" data-index="3">سدیم کلریت</button>
+        </div>
+
+        <div class="action-row">
+            <div class="feedback" id="feedbackMessage">✅ شروع کن!</div>
+            <button class="next-btn" id="nextBtn">سوال بعدی ➜</button>
+        </div>
+
+        <div class="footer">
+            <strong>مريم عرفاني مرادزاده</strong> · شیمی دهم
+        </div>
+    </div>
+    <script>
+        (function(){
+            // ----- داده‌های بازی (ترکیبات یونی دوتایی و چندتایی) -----
+            const questions = [
+                { formula: "NaCl",  correct: "سدیم کلرید", options: ["کلرید سدیم", "سدیم کلرید", "کلرید سدیم (II)", "سدیم کلریت"] },
+                { formula: "MgO",   correct: "منیزیم اکسید", options: ["اکسید منیزیم", "منیزیم اکسید", "منیزیم (II) اکسید", "اکسید منیزیم (II)"] },
+                { formula: "CaF₂",  correct: "کلسیم فلورید", options: ["فلورید کلسیم", "کلسیم فلورید", "کلسیم (II) فلورید", "فلورید کلسیم (II)"] },
+                { formula: "Al₂O₃", correct: "آلومینیوم اکسید", options: ["اکسید آلومینیوم", "آلومینیوم اکسید", "آلومینیوم (III) اکسید", "اکسید آلومینیوم (III)"] },
+                { formula: "Na₂O",  correct: "سدیم اکسید", options: ["اکسید سدیم", "سدیم اکسید", "سدیم (I) اکسید", "اکسید سدیم (I)"] },
+                { formula: "KCl",   correct: "پتاسیم کلرید", options: ["کلرید پتاسیم", "پتاسیم کلرید", "پتاسیم (I) کلرید", "کلرید پتاسیم (I)"] },
+                { formula: "LiBr",  correct: "لیتیم برمید", options: ["برمید لیتیم", "لیتیم برمید", "لیتیم (I) برمید", "برمید لیتیم (I)"] },
+                { formula: "BeO",   correct: "بریلیوم اکسید", options: ["اکسید بریلیوم", "بریلیوم اکسید", "بریلیوم (II) اکسید", "اکسید بریلیوم (II)"] },
+                { formula: "NH₄Cl", correct: "کلرید آمونیوم", options: ["کلرید آمونیوم", "آمونیوم کلرید", "کلرید آمونیوم (I)", "آمونیوم کلرید (I)"] },
+                { formula: "NaOH",  correct: "سدیم هیدروکسید", options: ["هیدروکسید سدیم", "سدیم هیدروکسید", "سدیم (I) هیدروکسید", "هیدروکسید سدیم (I)"] },
+                { formula: "KNO₃",  correct: "پتاسیم نیترات", options: ["نیترات پتاسیم", "پتاسیم نیترات", "پتاسیم (I) نیترات", "نیترات پتاسیم (I)"] },
+                { formula: "CaCO₃", correct: "کلسیم کربنات", options: ["کربنات کلسیم", "کلسیم کربنات", "کلسیم (II) کربنات", "کربنات کلسیم (II)"] },
+                { formula: "MgSO₄", correct: "منیزیم سولفات", options: ["سولفات منیزیم", "منیزیم سولفات", "منیزیم (II) سولفات", "سولفات منیزیم (II)"] },
+                { formula: "CuCl₂", correct: "مس (II) کلرید", options: ["کلرید مس (II)", "مس (II) کلرید", "کلرید مس", "مس کلرید (II)"] },
+                { formula: "Fe₂O₃", correct: "آهن (III) اکسید", options: ["اکسید آهن (III)", "آهن (III) اکسید", "اکسید آهن", "آهن اکسید (III)"] }
+            ];
+
+            // ----- متغیرهای وضعیت -----
+            let currentIndex = 0;
+            let score = 0;
+            let isAnswered = false;
+            let selectedOption = null;      // index دکمه انتخاب‌شده
+            let correctAnswerIndex = -1;
+
+            // المنت‌ها
+            const formulaDisplay = document.getElementById('formulaDisplay');
+            const hintDisplay = document.getElementById('hintDisplay');
+            const optionsBtns = document.querySelectorAll('.option-btn');
+            const feedbackEl = document.getElementById('feedbackMessage');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const nextBtn = document.getElementById('nextBtn');
+
+            // ----- توابع کمکی -----
+            function shuffleArray(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
+
+            // بارگذاری سوال با ایندکس داده شده
+            function loadQuestion(index) {
+                const q = questions[index];
+                if (!q) {
+                    // اگر سوالی نبود (اتفاق نمی‌افتد)
+                    return;
+                }
+
+                // تنظیم فرمول و hint
+                formulaDisplay.textContent = q.formula;
+                hintDisplay.textContent = `🔍 نام ترکیب را انتخاب کن`;
+
+                // shuffle گزینه‌ها (برای تنوع) ولی جای درست را ذخیره کن
+                const shuffled = shuffleArray([...q.options]);
+                // پیدا کردن ایندکس گزینه صحیح در shuffled
+                const correctText = q.correct;
+                correctAnswerIndex = shuffled.indexOf(correctText);
+
+                // به‌روزرسانی دکمه‌ها
+                optionsBtns.forEach((btn, i) => {
+                    btn.textContent = shuffled[i];
+                    btn.className = 'option-btn';        // ریست کلاس‌ها
+                    btn.dataset.correct = (i === correctAnswerIndex) ? 'true' : 'false';
+                    btn.disabled = false;
+                });
+
+                // ریست وضعیت
+                isAnswered = false;
+                selectedOption = null;
+                feedbackEl.textContent = '🤔 کدام گزینه درست است؟';
+                feedbackEl.style.background = '#0d2f41';
+                nextBtn.disabled = true;   // تا وقتی جواب نده نوبت بعد فعال نشه
+
+                // حذف disabled از همه و reset
+                optionsBtns.forEach(btn => {
+                    btn.classList.remove('correct', 'wrong', 'disabled');
+                    btn.disabled = false;
+                });
+            }
+
+            // بررسی پاسخ کاربر
+            function handleOptionClick(e) {
+                const btn = e.currentTarget;
+                // اگر قبلاً پاسخ داده شده یا دکمه غیرفعال است، کاری نکن
+                if (isAnswered || btn.disabled) return;
+
+                // مشخص کردن گزینه صحیح و انتخاب کاربر
+                const isCorrect = btn.dataset.correct === 'true';
+                const btnIndex = Array.from(optionsBtns).indexOf(btn);
+
+                // غیرفعال کردن همه دکمه‌ها
+                optionsBtns.forEach(b => {
+                    b.disabled = true;
+                    b.classList.add('disabled');
+                });
+
+                // نمایش بازخورد
+                if (isCorrect) {
+                    score += 1;
+                    scoreDisplay.textContent = score;
+                    feedbackEl.textContent = '✅ درست! عالی!';
+                    feedbackEl.style.background = '#1b6b42';
+                    btn.classList.add('correct');
+                } else {
+                    feedbackEl.textContent = `❌ نادرست! گزینه صحیح: ${questions[currentIndex].correct}`;
+                    feedbackEl.style.background = '#8f2f3a';
+                    btn.classList.add('wrong');
+                    // نمایش گزینه درست
+                    optionsBtns.forEach(b => {
+                        if (b.dataset.correct === 'true') {
+                            b.classList.add('correct');
+                        }
+                    });
+                }
+
+                isAnswered = true;
+                selectedOption = btnIndex;
+                nextBtn.disabled = false;   // فعال شدن دکمه بعدی
+            }
+
+            // رفتن به سوال بعدی
+            function goToNext() {
+                if (!isAnswered) return;   // امنیت
+
+                // افزایش ایندکس (چرخشی)
+                currentIndex = (currentIndex + 1) % questions.length;
+                loadQuestion(currentIndex);
+                // اسکرول به بالا (در موبایل مفید)
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // ---- راه‌اندازی اولیه ----
+            function initGame() {
+                // shuffle کردن سوالات برای تنوع
+                shuffleArray(questions);
+                // ریست امتیاز
+                score = 0;
+                scoreDisplay.textContent = '0';
+                currentIndex = 0;
+                loadQuestion(0);
+
+                // اتصال رویدادها به دکمه‌ها
+                optionsBtns.forEach(btn => {
+                    btn.addEventListener('click', handleOptionClick);
+                });
+
+                nextBtn.addEventListener('click', goToNext);
+
+                // دکمه بعدی در ابتدا غیرفعال
+                nextBtn.disabled = true;
+            }
+
+            initGame();
+        })();
+    </script>
+</body>
+</html>
